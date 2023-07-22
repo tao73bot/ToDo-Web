@@ -7,6 +7,12 @@ const pool = require("./db");
 app.use(cors());
 app.use(express.json());  // allows us to access the req.body
 
+// Routes//
+
+// Register and Login routes
+
+app.use("/auth",require("./routes/jwtAuth"));
+
 // create a todo
 
 app.post("/todos",async(req,res) => {
