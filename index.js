@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const pool = require("./db");
 
-app.use(express.json());
+// middleware
+app.use(cors());
+app.use(express.json());  // allows us to access the req.body
 
 // create a todo
 
