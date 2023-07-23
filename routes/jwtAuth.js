@@ -4,7 +4,13 @@ const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
 const authorization = require("../middleware/authorization");
-const bodyParser = require("body-parser");
+//const bodyParserr = require("body-parser");
+
+// Parse application/x-www-form-urlencoded
+//app.use(bodyParserr.json());
+
+// Serve static files from the "public" directory
+//app.use(express.static("public"));
 
 // registering
 
@@ -12,14 +18,14 @@ router.post("/register",validInfo, async (req, res) =>{
     try {
         // the req.body (name,email,password)
 
-        const { name, email, password} = req.body;
+        const { name, email, password} = req.body;        
 
         // check if user exit
 
-        const user = await pool.query("SELECT * FROM users WHERE user_email = $1",[email]);
+        const user = await pool.query("SELECT * FROM users WHERE user_email = $1",[email]);        
 
         if(user.rows.length !==0){
-            return res.status(401).send("User already exist");
+            return res.status(401).json({message: "User already exist"});
         }
 
         // Bcrypt the user password
@@ -33,22 +39,20 @@ router.post("/register",validInfo, async (req, res) =>{
 
         const newUser = await pool.query("INSERT INTO users (user_name,user_email,user_password) VALUES($1, $2, $3)",[name,email,bcryptPassword]);
 
-        // generating jwt token
+        // generating jwt token        
 
-        const token = jwtGenerator(newUser.rows[0].user_id);
+        const token = jwtGenerator(name);
+
+        //console.log(token)
 
         res.json({ token });
+
+
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).json({message: "Server Error"});
     }
 });
-
-// Parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// Serve static files from the "public" directory
-app.use(express.static("public"));
 
 // login route
 
@@ -70,7 +74,7 @@ router.post("/login",validInfo, async (req,res) => {
             return res.status(401).json("Password or Email is incorrect.");
         }
         // give jwt token
-
+        
         const token = jwtGenerator(user.rows[0].user_id);
         res.json({token});
     } catch (err) {

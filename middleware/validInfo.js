@@ -6,8 +6,7 @@ module.exports = (req, res, next) => {
     }
 
     if(req.path === "/register") {
-        console.log(!email.lenght);
-        if(![email, name, password].every(Boolean)) {
+        if(email.length === 0 || password.length === 0 || name.length === 0) {
             return res.status(401).json("Missing Crednetials");
         }
         else if(!validEmail(email)) {
@@ -21,7 +20,6 @@ module.exports = (req, res, next) => {
         else if (!validEmail(email)){
             return res.status(401).json("Invalid Email");
         }
-    }
-
+    }    
     next();
 };
