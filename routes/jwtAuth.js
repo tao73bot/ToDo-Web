@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
 const authorization = require("../middleware/authorization");
+const bodyParser = require("body-parser");
 
 // registering
 
@@ -42,6 +43,12 @@ router.post("/register",validInfo, async (req, res) =>{
         res.status(500).send("Server Error");
     }
 });
+
+// Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Serve static files from the "public" directory
+app.use(express.static("public"));
 
 // login route
 
