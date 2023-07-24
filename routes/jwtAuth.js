@@ -4,13 +4,6 @@ const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
 const authorization = require("../middleware/authorization");
-//const bodyParserr = require("body-parser");
-
-// Parse application/x-www-form-urlencoded
-//app.use(bodyParserr.json());
-
-// Serve static files from the "public" directory
-//app.use(express.static("public"));
 
 // registering
 

@@ -1,19 +1,16 @@
-// const { route } = require("../routes/jwtAuth");
 
-// Function to handle form submission
 document.getElementById("loginForm").addEventListener("submit", function (event) {
-  event.preventDefault(); // Prevent the form from submitting
+  event.preventDefault(); 
 
   login();
 })
 
-/*
-// Function to show a message on the page
-function showMessage(message, color) {
-  const messageElement = document.getElementById("message");
-  messageElement.textContent = message;
-  messageElement.style.color = color;
-}*/
+document.getElementById("lbtn").addEventListener("click", function (event) {
+  event.preventDefault(); 
+
+  login();
+})
+
 
 function login() {
   const entredLoginCredentials = {
@@ -32,6 +29,7 @@ function login() {
       if(token) {
         console.log('token that you got : ',token);
         localStorage.setItem('token', token);
+        localStorage.setItem('email', document.getElementById('email').value);
         window.location.href = "./home.html";
       }
       else {

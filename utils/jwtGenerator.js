@@ -8,7 +8,6 @@ function jwtGenerator(user_id) {
         user: user_id
     }
 
-    // const expirationMinutes = 10;
 
     return jwt.sign(payload, process.env.jwtSecret, {expiresIn: "1hr"});
 }

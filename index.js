@@ -6,7 +6,7 @@ const pool = require("./db");
 
 // middleware
 app.use(cors());
-app.use(express.json());  // allows us to access the req.body
+app.use(express.json());  
 app.use(bodyParser.json())
 
 // Routes//
@@ -23,8 +23,8 @@ app.use("/dashboard", require("./routes/dashboard"));
 
 app.post("/createTodo",async(req,res) => {
     try{
-        const { id, description } = req.body;
-        const newTodo = await pool.query("INSERT INTO todo (description, id) VALUES ($1 , $2) RETURNING *",[description, id]);
+        const { id, description, mail} = req.body;        
+        const newTodo = await pool.query("INSERT INTO todo (description, id, email) VALUES ($1 , $2, $3) RETURNING *",[description, id, mail]);
 
         res.json(newTodo.rows[0]);
     }catch(err){
@@ -83,6 +83,27 @@ app.delete("/delete/:id", async (req, res) => {
         res.json("Todo was Deleted");
     } catch (err) {
         console.error(err.message);
+    }
+});
+
+app.post('/fetch', async (req, res) => {
+    const { mail } = req.body;
+
+    
+    if (!mail) {
+        return res.status(400).json({ error: 'No mail provided.' });
+    }
+
+    try {
+
+        const insertListSql = 'SELECT id, description from todo WHERE email = $1';
+        reslt = await pool.query(insertListSql, [mail]);
+        
+        return res.json(reslt.rows);
+    } catch (err) {
+        
+        console.error(' verification error:', err.message);
+        return res.status(401).json({ error: 'Invalid .' });
     }
 });
 
